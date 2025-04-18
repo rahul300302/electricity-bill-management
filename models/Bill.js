@@ -5,7 +5,10 @@ const billSchema = new mongoose.Schema({
   meterNumber: String,
   units: Number,
   amount: Number,
-  createdAt: { type: Date, default: Date.now }
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 module.exports = mongoose.model('Bill', billSchema);

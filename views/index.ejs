@@ -1,27 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Electricity Bill Management</title>
-  <link rel="stylesheet" href="/style.css">
+    <meta charset="UTF-8" />
+    <title>Electricity Bill Management</title>
+    <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>Electricity Bill Management System</h1>
-    <form action="/bills" method="POST">
-      <input type="text" name="name" placeholder="Customer Name" required />
-      <input type="text" name="meterNumber" placeholder="Meter Number" required />
-      <input type="number" name="units" placeholder="Units Consumed" required />
-      <button type="submit">Submit Bill</button>
-    </form>
+    <div class="container">
+        <h1>⚡ Electricity Bill Management System</h1>
 
-    <hr />
-    <h2>Bill Records</h2>
-    <ul>
-      <% bills.forEach(bill => { %>
-        <li><strong><%= bill.name %></strong> | Meter: <%= bill.meterNumber %> | Units: <%= bill.units %> | Amount: ₹<%= bill.amount %></li>
-      <% }) %>
-    </ul>
-  </div>
+        <form id="billForm">
+            <input type="text" name="name" placeholder="Customer Name" required />
+            <input type="text" name="meterNumber" placeholder="Meter Number" required />
+            <input type="number" name="units" placeholder="Units Consumed" required />
+
+            <div class="form-buttons">
+                <button type="submit">Submit Bill</button>
+                <button type="button" onclick="clearForm()">Clear Form</button>
+                <button type="button" onclick="showDateTime()">Show Date & Time</button>
+            </div>
+        </form>
+
+        <p id="datetime" class="datetime"></p>
+
+        <!-- Popup Message -->
+        <div id="popup" class="popup">
+            <span class="close-btn" onclick="closePopup()">❌</span>
+            ✅ <strong>Bill Submitted Successfully!</strong>
+        </div>
+
+        <hr />
+        <h2>🧾 Bill Records</h2>
+        <!-- Button to toggle bill records visibility -->
+        <button class="viewBill" type="button" onclick="toggleBills()">View Bills</button>
+
+        <!-- Bill Records List -->
+        <ul id="billList" style="display: none;">
+            <% if (bills.length > 0) { %>
+                <% bills.forEach(bill => { %>
+                    <li class="bill-item">
+                        <strong><%= bill.name %></strong> | 
+                        Meter: <%= bill.meterNumber %> | 
+                        Units: <%= bill.units %> | 
+                        Amount: ₹<%= bill.amount %> | 
+                        Date: <%= new Date(bill.createdAt).toLocaleString() %>
+                    </li>
+                <% }) %>
+            <% } else { %>
+                <li class="no-records">❌ ___ No Records ___ ❌</li>
+            <% } %>
+        </ul>
+        
+    </div>
+
+    <script>
+        // Submit Form Using AJAX
+        document.getElementById('billForm').addEventListener('submit', async function (e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            const form = e.target;
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const res = await fetch('/bills', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                if (res.ok) {
+                    showPopup();
+                    form.reset(); // Clear form after submission
+                } else {
+                    alert("Error submitting bill");
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+
+        // Show Popup on successful submission
+        function showPopup() {
+            const popup = document.getElementById('popup');
+            popup.style.display = 'block';
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 3000); // Show for 3 seconds
+        }
+
+        // Close Popup manually
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        // Clear Form Inputs
+        function clearForm() {
+            document.getElementById('billForm').reset();
+        }
+
+        // Toggle Bill History View
+        function toggleBills() {
+            const billList = document.getElementById('billList');
+            billList.style.display = billList.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Show Current Date & Time
+        function showDateTime() {
+            const now = new Date();
+            document.getElementById('datetime').innerText = "📅 " + now.toLocaleString();
+        }
+    </script>
 </body>
 </html>

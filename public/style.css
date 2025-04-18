@@ -1,56 +1,177 @@
 body {
     font-family: 'Segoe UI', sans-serif;
-    background: #f3f4f6;
+    background-color: #f4f7f9;
     margin: 0;
     padding: 0;
-  }
-  
-  .container {
-    max-width: 600px;
-    margin: 3rem auto;
-    background: #fff;
-    padding: 2rem;
-    border-radius: 1rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-  
-  h1, h2 {
-    color: #333;
+}
+
+.container {
+    max-width: 700px;
+    margin: 50px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+h1,
+h2 {
     text-align: center;
-  }
-  
-  form {
+    color: #333;
+}
+
+.viewBill {
+    background-color: #f83737;
+    color: white;
+    padding: 10px 20px;
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    display: block;
+    margin: 5px auto;
+}
+
+.viewBill:hover {
+    background-color: #f00202;
+}
+
+form {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-  }
-  
-  input, button {
-    padding: 0.8rem;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+input {
+    padding: 10px;
+    font-size: 16px;
     border: 1px solid #ccc;
-    border-radius: 8px;
-  }
-  
-  button {
-    background: #007bff;
+    border-radius: 10px;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    background-color: #007bff;
     color: white;
+    border-radius: 10px;
     cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  button:hover {
-    background: #0056b3;
-  }
-  
-  ul {
-    list-style: none;
+    flex: 1;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+ul {
+    list-style-type: none;
     padding: 0;
-  }
-  
-  li {
-    background: #eaeaea;
-    margin: 0.5rem 0;
-    padding: 0.8rem;
-    border-radius: 6px;
-  }
-  
+    color: #444;
+    margin-top: 20px;
+}
+
+.bill-item {
+    padding: 10px;
+    border-bottom: 1px solid #eaeaea;
+    font-size: 16px;
+}
+
+.bill-item:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
+.datetime {
+    text-align: center;
+    font-style: italic;
+    color: #666;
+    margin-top: -10px;
+}
+
+.popup {
+    display: none;
+    text-align: center;
+    color: green;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.popup {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    font-size: 16px;
+    z-index: 9999;
+    display: none;
+    animation: fadeIn 0.5s ease-in;
+}
+
+.popup .close-btn {
+    float: right;
+    margin-left: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* Styling for the No Records message */
+.no-records {
+    text-align: center;
+    font-size: 18px;
+    color: #353333;
+    font-weight: bold;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    margin-top: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+/* Additional Styles for the Bill Items */
+.bill-item {
+    padding: 10px;
+    border-bottom: 1px solid #eaeaea;
+    background-color: #f9f9f9;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #030303;
+}
+
+.bill-item strong {
+    color: #007bff;
+}
+
+/* For the Bill List */
+#billList {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 20px;
+}

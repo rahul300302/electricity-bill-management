@@ -1,22 +1,27 @@
 /* Base Reset */
-body {
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #f4f7f9;
+html, body {
+    height: 100%;
+    width: 100%;
     margin: 0;
     padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f7f9;
+    box-sizing: border-box;
 }
 
 /* Responsive Container */
 .container {
-    max-width: 700px;
-    margin: 50px auto;
+    width: 100%;
+    max-width: 100%;
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 20px;
     background: white;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    width: 90%;
+    border-radius: 0;
+    box-shadow: none;
     box-sizing: border-box;
 }
+
 
 /* Headings */
 h1, h2 {
@@ -171,9 +176,10 @@ ul {
 @media (max-width: 600px) {
     .container {
         padding: 20px;
-        margin: 20px auto;
+        margin: 0 auto; /* Remove top space */
+        border-radius: 0; /* Optional: remove curve for full look */
+        box-shadow: none;
     }
-
     .bill-item {
         font-size: 13px;
         flex-direction: column;

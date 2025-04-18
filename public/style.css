@@ -22,7 +22,6 @@ html, body {
     box-sizing: border-box;
 }
 
-
 /* Headings */
 h1, h2 {
     text-align: center;
@@ -115,6 +114,27 @@ ul {
     color: #007bff;
 }
 
+/* Delete Button Style */
+.delete-btn {
+    background-color: #f44336; /* Red */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+    margin-left:90%;
+}
+
+.delete-btn:hover {
+    background-color: #d32f2f; /* Darker red on hover */
+}
+
+.delete-btn:focus {
+    outline: none;
+}
+
 /* No Records Style */
 .no-records {
     text-align: center;
@@ -176,8 +196,8 @@ ul {
 @media (max-width: 600px) {
     .container {
         padding: 20px;
-        margin: 0 auto; /* Remove top space */
-        border-radius: 0; /* Optional: remove curve for full look */
+        margin: 0 auto;
+        border-radius: 0;
         box-shadow: none;
     }
     .bill-item {
@@ -204,6 +224,5 @@ ul {
         right: 5%;
         top: 10px;
         font-size: 14px;
-        padding: 10px;
     }
 }

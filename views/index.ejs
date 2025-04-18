@@ -10,13 +10,14 @@
     <div class="container">
         <h1>⚡ Electricity Bill Management System</h1>
 
+        <!-- Bill Form -->
         <form id="billForm">
             <input type="text" name="name" placeholder="Customer Name" required />
             <input type="text" name="meterNumber" placeholder="Meter Number" required />
             <input type="number" name="units" placeholder="Units Consumed" required />
 
             <div class="form-buttons">
-                <button type="submit">Submit Bill</button>
+                <button type="submit" >Submit Bill</button>
                 <button type="button" onclick="clearForm()">Clear Form</button>
                 <button type="button" onclick="showDateTime()">Show Date & Time</button>
             </div>
@@ -24,7 +25,7 @@
 
         <p id="datetime" class="datetime"></p>
 
-        <!-- Popup Message -->
+        <!-- Popup -->
         <div id="popup" class="popup">
             <span class="close-btn" onclick="closePopup()">❌</span>
             ✅ <strong>Bill Submitted Successfully!</strong>
@@ -32,30 +33,31 @@
 
         <hr />
         <h2>🧾 Bill Records</h2>
-        <!-- Button to toggle bill records visibility -->
         <button class="viewBill" type="button" onclick="toggleBills()">View Bills</button>
 
-        <!-- Bill Records List -->
+        <!-- Bill List -->
         <ul id="billList" style="display: none;">
             <% if (bills.length > 0) { %>
                 <% bills.forEach(bill => { %>
-                    <li class="bill-item">
-                        <strong><%= bill.name %></strong> | 
-                        Meter: <%= bill.meterNumber %> | 
-                        Units: <%= bill.units %> | 
-                        Amount: ₹<%= bill.amount %> | 
-                        Date: <%= new Date(bill.createdAt).toLocaleString() %>
+                    <li class="bill-item" id="bill-<%= bill._id %>">
+                        <span>
+                            <strong><%= bill.name %></strong> | 
+                            Meter: <%= bill.meterNumber %> | 
+                            Units: <%= bill.units %> | 
+                            Amount: ₹<%= bill.amount %> | 
+                            Date: <%= new Date(bill.createdAt).toLocaleString() %>
+                        </span>
+                        <button class="delete-btn" onclick="deleteBill('<%= bill._id %>')" title="Delete">&#x1F5D1;</button>
                     </li>
                 <% }) %>
             <% } else { %>
                 <li class="no-records">❌ ___ No Records ___ ❌</li>
             <% } %>
         </ul>
-        
     </div>
 
     <script>
-        // Submit Form Using AJAX
+        // Form submission handling
         document.getElementById('billForm').addEventListener('submit', async function (e) {
             e.preventDefault(); // Prevent the default form submission
 
@@ -73,8 +75,11 @@
                 });
 
                 if (res.ok) {
-                    showPopup();
-                    form.reset(); // Clear form after submission
+                    showPopup();  // Show popup if the response is successful
+                    form.reset(); // Optionally reset the form after submission
+                    setTimeout(() => {
+                        location.reload()
+                    }, 500)
                 } else {
                     alert("Error submitting bill");
                 }
@@ -83,32 +88,39 @@
             }
         });
 
-        // Show Popup on successful submission
+        // Show popup function
         function showPopup() {
             const popup = document.getElementById('popup');
-            popup.style.display = 'block';
+            popup.style.display = 'block'; // Show the popup
+
             setTimeout(() => {
-                popup.style.display = 'none';
-            }, 3000); // Show for 3 seconds
+                popup.style.display = 'none'; // Hide the popup after 5 seconds
+            }, 5000); // 5000 ms = 5 seconds
         }
 
-        // Close Popup manually
+        // Close the popup manually
         function closePopup() {
-            document.getElementById('popup').style.display = 'none';
+            const popup = document.getElementById('popup');
+            popup.style.display = 'none';
         }
 
-        // Clear Form Inputs
+        // Clear the form
         function clearForm() {
             document.getElementById('billForm').reset();
         }
 
-        // Toggle Bill History View
+        // function submit() {
+        //     location.reload(); // Reload the page to display the new bill
+        // }
+
+        // Toggle the visibility of the bills list
         function toggleBills() {
+
             const billList = document.getElementById('billList');
             billList.style.display = billList.style.display === 'none' ? 'block' : 'none';
         }
 
-        // Show Current Date & Time
+        // Show current date and time
         function showDateTime() {
             const now = new Date();
             document.getElementById('datetime').innerText = "📅 " + now.toLocaleString();

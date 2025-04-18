@@ -5,7 +5,7 @@ const Bill = require('../models/Bill');
 // Home Route to Render the Form and Show Bills
 router.get('/', async (req, res) => {
     try {
-        const bills = await Bill.find();
+        const bills = await Bill.find().sort({ createdAt: -1 });
         res.render('index', { bills });
     } catch (err) {
         console.error(err);
@@ -33,6 +33,16 @@ router.post('/bills', async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Error submitting bill' });
+    }
+});
+
+router.delete('/bills/:id', async (req, res) => {
+    try {
+        await Bill.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: 'Bill deleted successfully' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Error deleting bill' });
     }
 });
 

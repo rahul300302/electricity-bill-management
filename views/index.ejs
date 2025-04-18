@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Electricity Bill Management</title>
     <link rel="stylesheet" href="/style.css" />
 </head>
+
 <body>
     <div class="container">
         <h1>⚡ Electricity Bill Management System</h1>
@@ -17,7 +19,7 @@
             <input type="number" name="units" placeholder="Units Consumed" required />
 
             <div class="form-buttons">
-                <button type="submit" >Submit Bill</button>
+                <button type="submit">Submit Bill</button>
                 <button type="button" onclick="clearForm()">Clear Form</button>
                 <button type="button" onclick="showDateTime()">Show Date & Time</button>
             </div>
@@ -37,22 +39,25 @@
 
         <!-- Bill List -->
         <ul id="billList" style="display: none;">
-            <% if (bills.length > 0) { %>
-                <% bills.forEach(bill => { %>
+            <% if (bills.length> 0) { %>
+                <% bills.forEach(bill=> { %>
                     <li class="bill-item" id="bill-<%= bill._id %>">
                         <span>
-                            <strong><%= bill.name %></strong> | 
-                            Meter: <%= bill.meterNumber %> | 
-                            Units: <%= bill.units %> | 
-                            Amount: ₹<%= bill.amount %> | 
-                            Date: <%= new Date(bill.createdAt).toLocaleString() %>
+                            <strong>
+                                <%= bill.name %>
+                            </strong> |
+                            Meter: <%= bill.meterNumber %> |
+                                Units: <%= bill.units %> |
+                                    Amount: ₹<%= bill.amount %> |
+                                        Date: <%= new Date(bill.createdAt).toLocaleString() %>
                         </span>
-                        <button class="delete-btn" onclick="deleteBill('<%= bill._id %>')" title="Delete">&#x1F5D1;</button>
+                        <button class="delete-btn" onclick="deleteBill('<%= bill._id %>')"
+                            title="Delete">&#x1F5D1;</button>
                     </li>
-                <% }) %>
-            <% } else { %>
-                <li class="no-records">❌ ___ No Records ___ ❌</li>
-            <% } %>
+                    <% }) %>
+                        <% } else { %>
+                            <li class="no-records">❌ ___ No Records ___ ❌</li>
+                            <% } %>
         </ul>
     </div>
 
@@ -79,7 +84,7 @@
                     form.reset(); // Optionally reset the form after submission
                     setTimeout(() => {
                         location.reload()
-                    }, 500)
+                    }, 700)
                 } else {
                     alert("Error submitting bill");
                 }
@@ -87,6 +92,30 @@
                 console.error('Error:', error);
             }
         });
+        // Delete a bill
+        async function deleteBill(id) {
+            if (confirm("Are you sure you want to delete this bill?")) {
+                try {
+                    const res = await fetch(`/bills/${id}`, {
+                        method: 'DELETE',
+                    });
+
+                    if (res.ok) {
+                        // Optionally remove the deleted item from the DOM
+                        const deletedItem = document.getElementById(`bill-${id}`);
+                        if (deletedItem) deletedItem.remove();
+
+                        // Optionally show success popup or alert
+                        alert("🗑️ Bill deleted successfully!");
+                    } else {
+                        alert("❌ Failed to delete the bill.");
+                    }
+                } catch (err) {
+                    console.error("Error deleting bill:", err);
+                    alert("⚠️ An error occurred while deleting the bill.");
+                }
+            }
+        }
 
         // Show popup function
         function showPopup() {
@@ -127,4 +156,5 @@
         }
     </script>
 </body>
+
 </html>

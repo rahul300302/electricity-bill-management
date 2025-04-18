@@ -103,6 +103,10 @@ ul {
     margin-bottom: 5px;
     font-size: 14px;
     color: #030303;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .bill-item:hover {
@@ -116,25 +120,25 @@ ul {
 
 /* Delete Button Style */
 .delete-btn {
-    background-color: #f44336; /* Red */
-    color: white;
+    background-color: #e7e6e6;
+    color: rgb(238, 5, 5);
     border: none;
     padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    font-size: 16px;
-    margin-left:90%;
+    font-size: 14px;
+    margin: 0;
+    margin-left: auto;
 }
 
 .delete-btn:hover {
-    background-color: #d32f2f; /* Darker red on hover */
+    background-color: #f7efef;
 }
 
 .delete-btn:focus {
     outline: none;
 }
-
 /* No Records Style */
 .no-records {
     text-align: center;

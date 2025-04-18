@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Electricity Bill Management</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Electricity Bill Management System</h1>
+    <form action="/bills" method="POST">
+      <input type="text" name="name" placeholder="Customer Name" required />
+      <input type="text" name="meterNumber" placeholder="Meter Number" required />
+      <input type="number" name="units" placeholder="Units Consumed" required />
+      <button type="submit">Submit Bill</button>
+    </form>
+
+    <hr />
+    <h2>Bill Records</h2>
+    <ul>
+      <% bills.forEach(bill => { %>
+        <li><strong><%= bill.name %></strong> | Meter: <%= bill.meterNumber %> | Units: <%= bill.units %> | Amount: ₹<%= bill.amount %></li>
+      <% }) %>
+    </ul>
+  </div>
+</body>
+</html>

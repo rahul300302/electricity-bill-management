@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Electricity Bill Management</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-r from-sky-100 to-blue-200 min-h-screen flex items-center justify-center p-4">
+
+  <div class="bg-white shadow-xl rounded-2xl w-full max-w-xl p-8 space-y-8" id="app">
+    
+    <!-- Login Section -->
+    <div id="loginSection">
+      <h2 class="text-2xl font-bold text-center text-blue-700">Login</h2>
+      <input id="username" type="text" placeholder="Username" class="w-full mt-4 p-3 border border-gray-300 rounded-lg" />
+      <input id="password" type="password" placeholder="Password" class="w-full mt-4 p-3 border border-gray-300 rounded-lg" />
+      <button onclick="login()" class="w-full mt-6 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700">Login</button>
+      <p class="mt-4 text-center">Don't have an account? <a href="javascript:void(0)" onclick="toggleRegister()" class="text-blue-600">Create one</a></p>
+    </div>
+
+    <!-- Register Section -->
+    <div id="registerSection" class="hidden">
+      <h2 class="text-2xl font-bold text-center text-blue-700">Create Account</h2>
+      <input id="newUsername" type="text" placeholder="Username" class="w-full mt-4 p-3 border border-gray-300 rounded-lg" />
+      <input id="newPassword" type="password" placeholder="Password" class="w-full mt-4 p-3 border border-gray-300 rounded-lg" />
+      <button onclick="createAccount()" class="w-full mt-6 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700">Create Account</button>
+      <p class="mt-4 text-center">Already have an account? <a href="javascript:void(0)" onclick="toggleLogin()" class="text-blue-600">Login</a></p>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div id="dashboardSection" class="hidden">
+      <h2 class="text-2xl font-bold text-blue-700">Dashboard</h2>
+
+      <!-- User Creation -->
+      <div class="mt-6">
+        <h3 class="text-lg font-semibold">Create Customer</h3>
+        <input id="newUser" type="text" placeholder="Customer Name" class="w-full mt-2 p-3 border border-gray-300 rounded-lg" />
+        <input id="newMeter" type="text" placeholder="Meter Number" class="w-full mt-2 p-3 border border-gray-300 rounded-lg" />
+        <button onclick="createCustomer()" class="w-full mt-3 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700">Create</button>
+      </div>
+
+      <!-- Bill Generation -->
+      <div class="mt-8">
+        <h3 class="text-lg font-semibold">Generate Bill</h3>
+        <input id="units" type="number" placeholder="Units Consumed" class="w-full mt-2 p-3 border border-gray-300 rounded-lg" />
+        <button onclick="generateBill()" class="w-full mt-3 bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700">Generate</button>
+        <div id="billAmount" class="mt-2 text-green-700 font-semibold"></div>
+      </div>
+
+      <!-- Payment Section -->
+      <div class="mt-8">
+        <h3 class="text-lg font-semibold">Make Payment</h3>
+        <select id="paymentMethod" class="w-full mt-2 p-3 border border-gray-300 rounded-lg">
+          <option value="">-- Select Payment Method --</option>
+          <option value="UPI">UPI</option>
+          <option value="NetBanking">Net Banking</option>
+          <option value="Card">Credit/Debit Card</option>
+        </select>
+        <button onclick="makePayment()" class="w-full mt-3 bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700">Pay</button>
+      </div>
+
+      <!-- Bill History -->
+      <div class="mt-8">
+        <h3 class="text-lg font-semibold">Bill History</h3>
+        <ul id="billHistory" class="mt-2 text-gray-700 space-y-2">
+          <!-- Bill history items will be dynamically added here -->
+        </ul>
+      </div>
+
+      <!-- User History -->
+      <div class="mt-8">
+        <h3 class="text-lg font-semibold">User History</h3>
+        <ul id="userHistory" class="mt-2 text-gray-700 space-y-2">
+          <!-- User history items will be dynamically added here -->
+        </ul>
+      </div>
+
+      <!-- Logout Section -->
+      <button onclick="logout()" class="w-full mt-6 bg-red-600 text-white py-3 rounded-lg hover:bg-red-700">Logout</button>
+    </div>
+
+    <!-- Toast container -->
+    <div id="toast" class="fixed top-5 right-5 space-y-2 z-50"></div>
+  </div>
+
+  <script>
+    // Initialize or load histories from localStorage
+    let billHistory = JSON.parse(localStorage.getItem('billHistory')) || [];
+    let userHistory = JSON.parse(localStorage.getItem('userHistory')) || [];
+    let users = JSON.parse(localStorage.getItem('users')) || [];
+
+    // Function to show toast messages
+    function showToast(msg, type = 'info') {
+      const colors = {
+        success: 'bg-green-500',
+        error: 'bg-red-500',
+        info: 'bg-blue-500'
+      };
+      const toast = document.createElement('div');
+      toast.className = `${colors[type]} text-white px-4 py-3 rounded-lg shadow-lg animate-bounce-in`;
+      toast.innerText = msg;
+      document.getElementById('toast').appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    // Toggle between login and register section
+    function toggleRegister() {
+      document.getElementById('loginSection').classList.add('hidden');
+      document.getElementById('registerSection').classList.remove('hidden');
+    }
+
+    function toggleLogin() {
+      document.getElementById('registerSection').classList.add('hidden');
+      document.getElementById('loginSection').classList.remove('hidden');
+    }
+
+    // Login Function
+    function login() {
+      const u = document.getElementById('username').value;
+      const p = document.getElementById('password').value;
+      const user = users.find(user => user.username === u && user.password === p);
+      if (user) {
+        document.getElementById('loginSection').classList.add('hidden');
+        document.getElementById('dashboardSection').classList.remove('hidden');
+        showToast('Login Successful', 'success');
+      } else {
+        showToast('Invalid credentials', 'error');
+      }
+    }
+
+    // Create Account Function
+    function createAccount() {
+      const u = document.getElementById('newUsername').value;
+      const p = document.getElementById('newPassword').value;
+      if (u && p) {
+        users.push({ username: u, password: p });
+        localStorage.setItem('users', JSON.stringify(users));
+        showToast('Account created successfully', 'success');
+        toggleLogin();
+      } else {
+        showToast('Please enter a username and password', 'error');
+      }
+    }
+
+    // Create Customer Function
+    function createCustomer() {
+      const name = document.getElementById('newUser').value;
+      const meter = document.getElementById('newMeter').value;
+      if (name && meter) {
+        // Add user to userHistory and update localStorage
+        userHistory.push({ name, meter });
+        localStorage.setItem('userHistory', JSON.stringify(userHistory));
+        showToast(`Customer "${name}" added`, 'success');
+        updateUserHistory();
+      } else {
+        showToast('Enter name and meter number', 'error');
+      }
+    }
+
+    // Generate Bill Function
+    function generateBill() {
+      const units = parseFloat(document.getElementById('units').value);
+      if (units > 0) {
+        const amount = units * 7.5;
+        document.getElementById('billAmount').textContent = `Total Bill: ₹${amount.toFixed(2)}`;
+
+        // Add bill to billHistory and update localStorage
+        const bill = { units, amount: amount.toFixed(2), date: new Date().toLocaleString() };
+        billHistory.push(bill);
+        localStorage.setItem('billHistory', JSON.stringify(billHistory));
+        showToast('Bill generated', 'info');
+        updateBillHistory();
+      } else {
+        showToast('Enter valid unit value', 'error');
+      }
+    }
+
+    // Make Payment Function
+    function makePayment() {
+      const method = document.getElementById('paymentMethod').value;
+      if (method) {
+        showToast(`Payment successful via ${method}`, 'success');
+      } else {
+        showToast('Select payment method', 'error');
+      }
+    }
+
+    // Update Bill History in UI
+    function updateBillHistory() {
+      const billHistoryList = document.getElementById('billHistory');
+      billHistoryList.innerHTML = '';
+      billHistory.forEach(bill => {
+        const li = document.createElement('li');
+        li.className = 'border-b border-gray-300 py-2';
+        li.innerHTML = `<strong>₹${bill.amount}</strong> - Units: ${bill.units} - Date: ${bill.date}`;
+        billHistoryList.appendChild(li);
+      });
+    }
+
+    // Update User History in UI
+    function updateUserHistory() {
+      const userHistoryList = document.getElementById('userHistory');
+      userHistoryList.innerHTML = '';
+      userHistory.forEach(user => {
+        const li = document.createElement('li');
+        li.className = 'border-b border-gray-300 py-2';
+        li.innerHTML = `${user.name} - Meter: ${user.meter}`;
+        userHistoryList.appendChild(li);
+      });
+    }
+
+    // Logout Function
+    function logout() {
+      document.getElementById('dashboardSection').classList.add('hidden');
+      document.getElementById('loginSection').classList.remove('hidden');
+      showToast('Logged out successfully', 'info');
+    }
+
+    // Initial update of history UI
+    updateBillHistory();
+    updateUserHistory();
+  </script>
+
+</body>
+</html>

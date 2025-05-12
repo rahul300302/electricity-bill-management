@@ -1,7 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const Bill = require('../models/Bill');
+const authMiddleware=require('../middleware/auth')
 
+
+// Add middleware to routes
+router.get('/', authMiddleware, async (req, res) => {
+    const bills = await Bill.find().sort({ createdAt: -1 });
+    res.render('index', { bills });
+});
 // Home Route to Render the Form and Show Bills
 router.get('/', async (req, res) => {
     try {

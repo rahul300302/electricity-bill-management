@@ -44,3 +44,22 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+
+
+// // db.js
+// const mysql = require('mysql2');
+
+// const db = mysql.createConnection({
+//   host: 'sql112.infinityfree.com',
+//   user: 'if0_38974788',
+//   password: 'Iy3iRt6juSw9DKP', // your MySQL root password
+//   database: 'if0_38974788_XXX'
+// });
+
+// db.connect((err) => {
+//   if (err) throw err;
+//   console.log('✅ MySQL Connected');
+// });
+
+// module.exports = db;

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Electricity Bill Management</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://kit.fontawesome.com/a076d05399.js"></script> <!-- For comedy or smiley icon -->
 </head>
 <body class="bg-gradient-to-r from-sky-100 to-blue-200 min-h-screen flex items-center justify-center p-4">
 
@@ -14,7 +15,11 @@
     <div id="loginSection">
       <h2 class="text-2xl font-bold text-center text-blue-700">Login</h2>
       <input id="username" type="text" placeholder="Username" class="w-full mt-4 p-3 border border-gray-300 rounded-lg" />
-      <input id="password" type="password" placeholder="Password" class="w-full mt-4 p-3 border border-gray-300 rounded-lg" />
+      <div class="relative">
+        <input id="password" type="password" placeholder="Password" class="w-full mt-4 p-3 border border-gray-300 rounded-lg" />
+        <!-- Changed icon to smiley (funny) icon for toggling password -->
+        <i id="eye-icon" class="fas fa-grin-beam-sweat absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer"></i>
+      </div>
       <button onclick="login()" class="w-full mt-6 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700">Login</button>
       <p class="mt-4 text-center">Don't have an account? <a href="javascript:void(0)" onclick="toggleRegister()" class="text-blue-600">Create one</a></p>
     </div>
@@ -205,7 +210,7 @@
       userHistory.forEach(user => {
         const li = document.createElement('li');
         li.className = 'border-b border-gray-300 py-2';
-        li.innerHTML = `${user.name} - Meter: ${user.meter}`;
+        li.innerHTML = `<strong>${user.name}</strong> - Meter Number: ${user.meter}`;
         userHistoryList.appendChild(li);
       });
     }
@@ -217,10 +222,21 @@
       showToast('Logged out successfully', 'info');
     }
 
-    // Initial update of history UI
+    // Toggle Password Visibility
+    document.getElementById('eye-icon').addEventListener('click', function () {
+      const passwordField = document.getElementById('password');
+      if (passwordField.type === 'password') {
+        passwordField.type = 'text';
+        document.getElementById('eye-icon').className = 'fas fa-laugh-beam-sweat absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer'; // Update icon
+      } else {
+        passwordField.type = 'password';
+        document.getElementById('eye-icon').className = 'fas fa-grin-beam-sweat absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer'; // Update icon
+      }
+    });
+
+    // Initial Load
     updateBillHistory();
     updateUserHistory();
   </script>
-
 </body>
 </html>
